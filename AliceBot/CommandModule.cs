@@ -10,10 +10,8 @@ using System.Net.NetworkInformation;
 using System.Data;
 using System.IO;
 
-namespace AliceBot
-{
-    public class CommandModules : ModuleBase
-    {
+namespace AliceBot {
+    public class CommandModules : ModuleBase {
         string usage;
         string codeblock = "```";
         string newline = "\n";
@@ -29,16 +27,15 @@ namespace AliceBot
         private static string GetHeapSize() => Math.Round(GC.GetTotalMemory(true) / (1024.0 * 1024.0), 2).ToString();
 
         [Command("Help", RunMode = RunMode.Async)]
-        public async Task Help()
-        {
+        public async Task Help() {
             var user = Context.User;
             var x = await user.CreateDMChannelAsync();
             await x.SendMessageAsync(AddCmd.HelpList());
         }
 
         [Command("calculate", RunMode = RunMode.Async)]
-        public async Task Calculate([Remainder]string equation)
-        { //Needs improvement
+        public async Task Calculate([Remainder]string equation) { 
+            // Needs improvement
             usage = "Usage : `|calculate <equation>` , where `equation` must not contain any functions.";
 
             equation = equation.Replace("x", "*");
@@ -46,20 +43,15 @@ namespace AliceBot
             equation = equation.Replace("÷", "/");
             equation = equation.ToUpper().Replace("MOD", "%");
             equation = equation.ToUpper().Replace("PI", "3.14159265359");
-            try
-            {
+            try {
                 string value = new DataTable().Compute(equation, null).ToString();
-                if (value == "NaN")
-                {
+                if (value == "NaN") {
                     await Context.Channel.SendMessageAsync("Infinity or undefined");
-                }
-                else
-                {
+                } else {
                     await Context.Channel.SendMessageAsync(value);
                 }
             }
-            catch (Exception)
-            {
+            catch (Exception) {
                 await Context.Channel.SendMessageAsync("?");
             }
         }
